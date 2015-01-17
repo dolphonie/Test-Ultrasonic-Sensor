@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class CalibrateUltrasonicSensor extends Command {
-
+	private static final boolean PRINT=true;
     public CalibrateUltrasonicSensor() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -28,7 +28,7 @@ public class CalibrateUltrasonicSensor extends Command {
     	if(isNew){
     		distances.add(currentValue);
     		if(distances.size()>=100){
-    			double mean = 0;;
+    			double mean = 0;
     			for(double curValue: distances){
     				mean+=curValue;
     			}
@@ -62,7 +62,7 @@ public class CalibrateUltrasonicSensor extends Command {
     }
     
     private void pr (String printData){
-    	System.out.println("Calibrate Ultrasonic: "+printData);
+    	if(PRINT)System.out.println("Calibrate Ultrasonic: "+printData);
     }
     
     boolean isFinished = false;
