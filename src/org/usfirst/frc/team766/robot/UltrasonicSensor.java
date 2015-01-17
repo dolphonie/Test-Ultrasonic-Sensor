@@ -26,8 +26,14 @@ public class UltrasonicSensor implements Runnable {
 		serverThread.start();
 	}
 
-	public synchronized double getDistance() {
+	public synchronized double getDistance(boolean isNew) {
+		isNew = newValue;
+		newValue = false;
 		return distance;
+	}
+	
+	public synchronized double getDistance() {
+		return getDistance(false);
 	}
 
 	private synchronized void setValue(double d) {
@@ -75,10 +81,12 @@ public class UltrasonicSensor implements Runnable {
 			pr("Line Read");
 			if (isValid(s)) {
 				setValue(Double.parseDouble(s.substring(s.indexOf('R') + 1)));
+				newValue = true;
 			}
 		}
 	}
-
+	
+	private boolean newValue;
 	private SerialPort port;
 	private Thread serverThread = new Thread(this);
 	private double distance = Double.NaN;
