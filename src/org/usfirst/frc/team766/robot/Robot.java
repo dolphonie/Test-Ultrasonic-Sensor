@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team766.robot;
 
+import org.usfirst.frc.team766.robot.commands.CalibrateUltrasonicSensor;
 import org.usfirst.frc.team766.robot.commands.TestUltrasonic;
 import org.usfirst.frc.team766.robot.subsystems.ExampleSubsystem;
 
@@ -33,6 +34,7 @@ public class Robot extends IterativeRobot {
         // instantiate the command used for the autonomous period
         autonomousCommand = new TestUltrasonic();
         SmartDashboard.putData("Test Ultrasonic", new TestUltrasonic());
+        SmartDashboard.putData("Calibrate Ultrasonic", new CalibrateUltrasonicSensor());
     }
 	
 	public void disabledPeriodic() {
