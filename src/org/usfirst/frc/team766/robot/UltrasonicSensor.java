@@ -27,7 +27,8 @@ public class UltrasonicSensor implements Runnable {
 	}
 
 	public synchronized double getDistance(boolean isNew) {
-		isNew = newValue;
+		//isNew = newValue;
+		newValue = isNew;
 		newValue = false;
 		return distance;
 	}
