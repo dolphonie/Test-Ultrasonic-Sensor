@@ -1,38 +1,35 @@
 package org.usfirst.frc.team766.robot.commands;
 
-import org.usfirst.frc.team766.robot.UltrasonicSensor;
 import org.usfirst.frc.team766.robot.UltrasonicSensorPWM;
-import org.usfirst.frc.team766.robot.UltrasonicSensorPWM.UltrasonicValuePWM;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class TestPWMUltrasonic extends Command {
-	private static final int PORT = 8;
+public class TestTwoPWMs extends Command {
 
-	public TestPWMUltrasonic() {
+	public TestTwoPWMs() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
-		//sensor = new UltrasonicSensorPWM(PORT);
 	}
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
+		sensor1 = new UltrasonicSensorPWM(8);
+		sensor2 = new UltrasonicSensorPWM(6);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		counter++;
 		if (counter >= 5) {
-			sensor.updateValue();
-			UltrasonicValuePWM distance = sensor.getDistance();
-			if (distance.isNew) {
-				System.out.println("Test Ultrasonic PWM: Distance to target: "
-						+ distance.distance);
-			}
-			counter = 0;
+			sensor1.updateValue();
+			double sensor1Distance = sensor1.getDistanceDouble();
+			sensor2.updateValue();
+			double sensor2Distance = sensor2.getDistanceDouble();
+			pr("Sensor 1 Distance: " + sensor1Distance);
+			pr("Sensor 2 Distance: " + sensor2Distance);
 		}
 	}
 
@@ -50,6 +47,10 @@ public class TestPWMUltrasonic extends Command {
 	protected void interrupted() {
 	}
 
-	UltrasonicSensorPWM sensor;
-	int counter = 0;
+	private void pr(String line) {
+		System.out.println("Test 2 Ultrasonics: " + line);
+	}
+
+	private int counter = 0;
+	private UltrasonicSensorPWM sensor1, sensor2;
 }

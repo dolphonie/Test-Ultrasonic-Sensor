@@ -2,26 +2,18 @@ package org.usfirst.frc.team766.robot;
 
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.Timer;
 
-public class UltrasonicSensorPWM implements Runnable {
+public class UltrasonicSensorPWM {
 	private static final boolean PRINT_DATA = false;
 	private static final double TIMEOUT = 2;// .0098;
-	private static UltrasonicSensorPWM[] sensors = new UltrasonicSensorPWM[9];
 
-	public static UltrasonicSensorPWM getInstance(int inputPort) {
-		if (sensors[inputPort] == null) {
-			sensors[inputPort] = new UltrasonicSensorPWM(inputPort);
-		}
-		return sensors[inputPort];
-	}
-
-	private UltrasonicSensorPWM(int port) {
+	public UltrasonicSensorPWM(int port) {
 		inputPort = port;
 		outputPort = inputPort + 1;
-		counter = new Counter();
+		counter = new Counter(port);
 		counter.setSemiPeriodMode(true);
 		pulseController = new DigitalOutput(outputPort);
-		serverThread.start();
 	}
 
 	public synchronized double getDistanceDouble() {
@@ -31,9 +23,9 @@ public class UltrasonicSensorPWM implements Runnable {
 	private synchronized void setValue(double d) {
 		distance = d;
 	}
-	
-	public synchronized UltrasonicValuePWM getDistance(){
-		UltrasonicValuePWM returnThis = new UltrasonicValuePWM(distance,isNew);
+
+	public synchronized UltrasonicValuePWM getDistance() {
+		UltrasonicValuePWM returnThis = new UltrasonicValuePWM(distance, isNew);
 		isNew = false;
 		return returnThis;
 	}
@@ -44,7 +36,10 @@ public class UltrasonicSensorPWM implements Runnable {
 
 	public void initializeSensor() {
 		counter.reset();
-		pulseController.pulse(outputPort, (float) .03);
+		pulseController.set(true);
+		Timer.delay(.03);
+		pulseController.set(false);
+		Timer.delay(.2);
 	}
 
 	private void pr(String printData) {
@@ -52,26 +47,12 @@ public class UltrasonicSensorPWM implements Runnable {
 			System.out.println("Ultrasonic Sensor: " + printData);
 	}
 
-	public void run() {
-		while (true) {
-			initializeSensor();
-			while (true) {
-				double pulseLength = counter.getPeriod();
-				if (pulseLength != 0) {
-					setValue(pulseLength);
-					isNew = true;
-					break;
-				} else {
-					try {
-						Thread.sleep(98);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-
-			}
-		}
+	public void updateValue() {
+		initializeSensor();
+		double pulseLength = counter.getPeriod();
+		pr("Pulse Length: " + pulseLength);
+		setValue(pulseLength * 1e6);
+		isNew = true;
 	}
 
 	public class UltrasonicValuePWM {
@@ -89,6 +70,5 @@ public class UltrasonicSensorPWM implements Runnable {
 	private DigitalOutput pulseController;
 	private Counter counter;
 	private double distance = Double.NaN;
-	private Thread serverThread = new Thread(this);
 	private boolean isNew = false;
 }
