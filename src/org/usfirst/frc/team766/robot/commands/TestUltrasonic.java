@@ -25,7 +25,7 @@ public class TestUltrasonic extends Command {
 		foo++;
 		if (foo == 5) {
 			System.out.println("Test Ultrasonic: Distance to target: "
-					+ UltrasonicSensor.getInstance().getDistance());
+					+ UltrasonicSensor.getInstance().getDistanceDouble());
 			foo = 0;
 		}
 	}

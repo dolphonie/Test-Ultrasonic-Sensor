@@ -3,6 +3,7 @@ package org.usfirst.frc.team766.robot.commands;
 import java.util.ArrayList;
 
 import org.usfirst.frc.team766.robot.UltrasonicSensor;
+import org.usfirst.frc.team766.robot.UltrasonicSensor.UltrasonicValue;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -19,14 +20,18 @@ public class CalibrateUltrasonicSensor extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	UltrasonicSensor.getInstance();
+    	distances.clear();
+    	isFinished = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	boolean isNew = false;
-    	double currentValue = UltrasonicSensor.getInstance().getDistance(isNew);
-    	if(isNew){
-    		distances.add(currentValue);
+    	UltrasonicValue currentValue = UltrasonicSensor.getInstance().getDistance();
+    	if(currentValue.isNew){
+    		pr("Distance to target: " + new String(new Double(currentValue.distance).toString()));
+    		distances.add(currentValue.distance);
+    		pr("Array Size: "+distances.size());
+    		
     		if(distances.size()>=100){
     			double mean = 0;
     			for(double curValue: distances){
@@ -39,9 +44,11 @@ public class CalibrateUltrasonicSensor extends Command {
     				curValue*=curValue;
     				standardDev+=curValue;
     			}
+				standardDev/=distances.size();
     			standardDev = Math.sqrt(standardDev);
     			pr("Mean: "+mean);
     			pr("Standard Deviation: "+standardDev);
+    			distances.clear();
     			isFinished = true;
     		}
     	}

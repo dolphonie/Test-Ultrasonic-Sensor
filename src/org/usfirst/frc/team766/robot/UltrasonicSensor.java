@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
 
 public class UltrasonicSensor implements Runnable {
-
+	
 	private static final boolean PRINT_DATA = false;
 	private static final double TIMEOUT = 10;
 	private static UltrasonicSensor us;
@@ -26,14 +26,14 @@ public class UltrasonicSensor implements Runnable {
 		serverThread.start();
 	}
 
-	public synchronized double getDistance(boolean isNew) {
-		isNew = newValue;
-		newValue = false;
-		return distance;
+	public synchronized UltrasonicValue getDistance() {
+		boolean isCurrentNew = isNewValue;
+		isNewValue = false;
+		return new UltrasonicValue(distance,isCurrentNew);
 	}
 	
-	public synchronized double getDistance() {
-		return getDistance(false);
+	public double getDistanceDouble() {
+		return getDistance().distance;
 	}
 
 	private synchronized void setValue(double d) {
@@ -81,12 +81,23 @@ public class UltrasonicSensor implements Runnable {
 			pr("Line Read");
 			if (isValid(s)) {
 				setValue(Double.parseDouble(s.substring(s.indexOf('R') + 1)));
-				newValue = true;
+				isNewValue = true;
 			}
 		}
 	}
 	
-	private boolean newValue;
+	public class UltrasonicValue{
+		
+		public UltrasonicValue(double d, boolean n){
+			distance = d;
+			isNew = n;
+		}
+		
+		public double distance;
+		public boolean isNew;
+	}
+	
+	private boolean isNewValue = false;
 	private SerialPort port;
 	private Thread serverThread = new Thread(this);
 	private double distance = Double.NaN;
