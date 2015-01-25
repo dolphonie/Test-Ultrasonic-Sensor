@@ -12,12 +12,13 @@ public class TestTwoPWMs extends Command {
 	public TestTwoPWMs() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
+		sensor1 = new UltrasonicSensorPWM(8);
+		sensor2 = new UltrasonicSensorPWM(6);
 	}
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-		sensor1 = new UltrasonicSensorPWM(8);
-		sensor2 = new UltrasonicSensorPWM(6);
+
 	}
 
 	// Called repeatedly when this Command is scheduled to run
