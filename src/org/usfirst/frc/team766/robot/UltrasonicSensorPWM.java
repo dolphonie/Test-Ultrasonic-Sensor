@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Timer;
 
 public class UltrasonicSensorPWM {
-	private static final boolean PRINT_DATA = true;
+	private static final boolean PRINT_DATA = false;
 
 	public UltrasonicSensorPWM(int port) {
 		inputPort = port;
@@ -13,6 +13,8 @@ public class UltrasonicSensorPWM {
 		counter = new Counter(port);
 		counter.setSemiPeriodMode(true);
 		pulseController = new DigitalOutput(outputPort);
+		pulseController.set(false);
+		getDistance();
 	}
 
 	public double getDistance() {
@@ -27,7 +29,7 @@ public class UltrasonicSensorPWM {
 		pulseController.set(true);
 		Timer.delay(.03);
 		pulseController.set(false);
-		Timer.delay(.2);
+		Timer.delay(.15);
 	}
 
 	private void pr(String printData) {
@@ -43,5 +45,4 @@ public class UltrasonicSensorPWM {
 	private int inputPort, outputPort;
 	private DigitalOutput pulseController;
 	private Counter counter;
-	private double distance = Double.NaN;
 }

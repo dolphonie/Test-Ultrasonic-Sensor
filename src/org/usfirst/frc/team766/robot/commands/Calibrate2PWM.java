@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class Calibrate2PWM extends Command {
 	private static final int SAMPLES_TO_AVERAGE = 50;
-	private static final boolean PRINT_EVERY_VALUE = false;
+	private static final boolean PRINT_EVERY_VALUE = true;
 
 	public Calibrate2PWM() {
 		// Use requires() here to declare subsystem dependencies
@@ -16,7 +16,6 @@ public class Calibrate2PWM extends Command {
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-		Timer.delay(1);
 		sensor1 = new UltrasonicSensorPWM(8);
 		sensor2 = new UltrasonicSensorPWM(6);
 		resetValues();
@@ -43,7 +42,7 @@ public class Calibrate2PWM extends Command {
 		}
 		counter++;
 
-		if (counter >= 100) {
+		if (counter >= SAMPLES_TO_AVERAGE) {
 			for (int i = 0; i < distances.length; i++) {
 				double mean = 0;
 				for (double curValue : distances[i]) {
@@ -86,11 +85,12 @@ public class Calibrate2PWM extends Command {
 	}
 
 	private void pr(String line) {
-		System.out.println("Test 2 Ultrasonics: " + line);
+		System.out.println("Calibrate 2 Ultrasonics: " + line);
 	}
 
 	private void resetValues() {
 		counter = 0;
+		isFinished = false;
 		for (int i = 0; i < min.length; i++) {
 			min[i] = Double.MAX_VALUE;
 			max[i] = Double.MIN_VALUE;
