@@ -2,7 +2,6 @@ package org.usfirst.frc.team766.robot.commands;
 
 import org.usfirst.frc.team766.robot.UltrasonicSensorPWM;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class Calibrate2PWM extends Command implements Runnable {
@@ -19,6 +18,7 @@ public class Calibrate2PWM extends Command implements Runnable {
 		sensor1 = new UltrasonicSensorPWM(8);
 		sensor2 = new UltrasonicSensorPWM(6);
 		resetValues();
+		dataCollector = new Thread(this);
 		dataCollector.start();
 	}
 
@@ -80,6 +80,7 @@ public class Calibrate2PWM extends Command implements Runnable {
 	protected void end() {
 		sensor1.free();
 		sensor2.free();
+		dataCollector.interrupt();
 	}
 
 	// Called when another command which requires one or more of the same
@@ -134,7 +135,7 @@ public class Calibrate2PWM extends Command implements Runnable {
 
 	private double[] sensorValues = { Double.NaN, Double.NaN };
 	private boolean isNew = false;
-	private Thread dataCollector = new Thread(this);
+	private Thread dataCollector;
 	private boolean isFinished = false;
 	private double[] min = new double[2];
 	private double[] max = new double[2];
