@@ -1,7 +1,7 @@
 package org.usfirst.frc.team766.robot.commands;
 
 import org.usfirst.frc.team766.robot.Robot;
-import org.usfirst.frc.team766.robot.UltrasonicSensor;
+import org.usfirst.frc.team766.robot.ultrasonic.UltrasonicSensor;
 
 import edu.wpi.first.wpilibj.command.Command;
 

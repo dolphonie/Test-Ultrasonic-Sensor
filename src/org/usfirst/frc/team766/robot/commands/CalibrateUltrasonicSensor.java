@@ -2,8 +2,8 @@ package org.usfirst.frc.team766.robot.commands;
 
 import java.util.ArrayList;
 
-import org.usfirst.frc.team766.robot.UltrasonicSensor;
-import org.usfirst.frc.team766.robot.UltrasonicSensor.UltrasonicValue;
+import org.usfirst.frc.team766.robot.ultrasonic.UltrasonicSensor;
+import org.usfirst.frc.team766.robot.ultrasonic.UltrasonicSensor.UltrasonicValue;
 
 import edu.wpi.first.wpilibj.command.Command;
 

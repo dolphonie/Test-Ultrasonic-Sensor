@@ -1,6 +1,6 @@
 package org.usfirst.frc.team766.robot.commands;
 
-import org.usfirst.frc.team766.robot.UltrasonicSensorPWM;
+import org.usfirst.frc.team766.robot.ultrasonic.UltrasonicSensorPWM;
 
 import edu.wpi.first.wpilibj.command.Command;
 

@@ -1,10 +1,10 @@
-package org.usfirst.frc.team766.robot;
+package org.usfirst.frc.team766.robot.ultrasonic;
 
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Timer;
 
-public class UltrasonicSensorPWM {
+public class UltrasonicSensorPWM {//Do not use! Use UltrasonicPWM reader instead
 	private static final boolean PRINT_DATA = false;
 
 	public UltrasonicSensorPWM(int port) {

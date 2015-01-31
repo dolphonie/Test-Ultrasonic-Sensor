@@ -1,10 +1,11 @@
 package org.usfirst.frc.team766.robot.commands;
 
-import org.usfirst.frc.team766.robot.UltrasonicSensorPWM;
+import org.usfirst.frc.team766.robot.ultrasonic.UltrasonicInfo;
+import org.usfirst.frc.team766.robot.ultrasonic.UltrasonicPWMReader;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class Calibrate2PWM extends Command implements Runnable {
+public class Calibrate2PWM extends Command{
 	private static final int SAMPLES_TO_AVERAGE = 50;
 	private static final boolean PRINT_EVERY_VALUE = true;
 
@@ -15,19 +16,15 @@ public class Calibrate2PWM extends Command implements Runnable {
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-		sensor1 = new UltrasonicSensorPWM(8);
-		sensor2 = new UltrasonicSensorPWM(6);
 		resetValues();
-		dataCollector = new Thread(this);
-		dataCollector.start();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		Calibrate2PWMValues data = getDistance();
-		if (data.isNew) {
-			double distance1 = data.sensorValues[0];
-			double distance2 = data.sensorValues[1];
+		UltrasonicInfo data = UltrasonicPWMReader.getInstance().getDistance();
+		if (data.isNew()) {
+			double distance1 = data.getDistance1();
+			double distance2 = data.getDistance2();
 			if (PRINT_EVERY_VALUE) {
 				pr(counter + "th Attempt");
 				pr("Sensor 1 Distance to Target: " + distance1);
@@ -78,9 +75,6 @@ public class Calibrate2PWM extends Command implements Runnable {
 
 	// Called once after isFinished returns true
 	protected void end() {
-		sensor1.free();
-		sensor2.free();
-		dataCollector.interrupt();
 	}
 
 	// Called when another command which requires one or more of the same
@@ -100,46 +94,11 @@ public class Calibrate2PWM extends Command implements Runnable {
 			min[i] = Double.MAX_VALUE;
 			max[i] = Double.MIN_VALUE;
 		}
-		isNew = false;
 	}
 
-	private synchronized double[] getDistanceDouble() {
-		return sensorValues;
-	}
-
-	private synchronized Calibrate2PWMValues getDistance() {
-		boolean n = isNew;
-		isNew = false;
-		return new Calibrate2PWMValues(sensorValues, n);
-	}
-
-	private synchronized void setDistance(double d1, double d2) {
-		sensorValues[0] = d1;
-		sensorValues[1] = d2;
-	}
-
-	public void run() {
-		setDistance(sensor1.getDistance(), sensor2.getDistance());
-		isNew = true;
-	}
-
-	public class Calibrate2PWMValues {
-		public Calibrate2PWMValues(double[] sensorValues, boolean isNew) {
-			this.sensorValues = sensorValues;
-			this.isNew = isNew;
-		}
-
-		public double[] sensorValues;
-		public boolean isNew;
-	}
-
-	private double[] sensorValues = { Double.NaN, Double.NaN };
-	private boolean isNew = false;
-	private Thread dataCollector;
 	private boolean isFinished = false;
 	private double[] min = new double[2];
 	private double[] max = new double[2];
 	private double[][] distances = new double[2][SAMPLES_TO_AVERAGE];
 	private int counter;
-	private UltrasonicSensorPWM sensor1, sensor2;
 }

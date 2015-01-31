@@ -1,4 +1,4 @@
-package org.usfirst.frc.team766.robot;
+package org.usfirst.frc.team766.robot.ultrasonic;
 
 import edu.wpi.first.wpilibj.SerialPort;
 
