@@ -15,7 +15,7 @@ public class UltrasonicPWMReader implements Runnable {
 	}
 
 	public static double calculateAngle(double d1, double d2) {
-		return Math.atan((0.5 * (Math.abs(d1 - d2))) / 152.4);
+		return Math.toDegrees(Math.atan((0.5 * (Math.abs(d1 - d2))) / 152.4));
 	}
 
 	private UltrasonicPWMReader() {
