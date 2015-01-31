@@ -14,6 +14,10 @@ public class UltrasonicPWMReader implements Runnable {
 		return instance;
 	}
 
+	public static double calculateAngle(double d1, double d2) {
+		return Math.atan((0.5 * (Math.abs(d1 - d2))) / 152.4);
+	}
+
 	private UltrasonicPWMReader() {
 		sensor1 = new UltrasonicSensorPWM(8);
 		sensor2 = new UltrasonicSensorPWM(6);
@@ -32,8 +36,7 @@ public class UltrasonicPWMReader implements Runnable {
 	public synchronized UltrasonicInfo getDistance() {
 		boolean n = isNew;
 		isNew = false;
-		double angle = Math.atan((0.5 * (Math.abs(sensorValues[0]
-				- sensorValues[1]))) / 152.4);
+		double angle = calculateAngle(sensorValues[0],sensorValues[1]);
 		return new UltrasonicInfo(sensorValues, angle, n);
 	}
 

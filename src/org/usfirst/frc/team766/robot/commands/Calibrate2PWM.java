@@ -29,6 +29,7 @@ public class Calibrate2PWM extends Command{
 				pr(counter + "th Attempt");
 				pr("Sensor 1 Distance to Target: " + distance1);
 				pr("Sensor 2 Distance to Target: " + distance2);
+				pr("Angle: "+data.getAngle());
 			}
 			distances[0][counter] = distance1;
 			distances[1][counter] = distance2;
@@ -43,26 +44,28 @@ public class Calibrate2PWM extends Command{
 			counter++;
 
 			if (counter >= SAMPLES_TO_AVERAGE) {
+				double means[] = new double[2];
 				for (int i = 0; i < distances.length; i++) {
-					double mean = 0;
+					means[i] = 0;
 					for (double curValue : distances[i]) {
-						mean += curValue;
+						means[i]+= curValue;
 					}
-					mean /= SAMPLES_TO_AVERAGE;
+					means[i]/= SAMPLES_TO_AVERAGE;
 					double standardDev = 0;
 					for (double curValue : distances[i]) {
-						curValue -= mean;
+						curValue -= means[i];
 						curValue *= curValue;
 						standardDev += curValue;
 					}
 					standardDev /= SAMPLES_TO_AVERAGE;
 					standardDev = Math.sqrt(standardDev);
 					pr("Sensor " + i + ": ");
-					pr("	Mean: " + mean);
+					pr("	Mean: " + means[i]);
 					pr("	Standard Deviation: " + standardDev);
 					pr("	Minimum Distance: " + min[i]);
 					pr("	Maximum Distance: " + max[i]);
 				}
+				pr("Average Angle: "+UltrasonicPWMReader.calculateAngle(means[0], means[1]));
 				isFinished = true;
 			}
 		}
