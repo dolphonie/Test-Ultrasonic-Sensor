@@ -5,8 +5,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Timer;
 
 public class UltrasonicSensorPWM {
-	private static final boolean PRINT_DATA = false;
-	private static final double TIMEOUT = 2;// .0098;
+	private static final boolean PRINT_DATA = true;
 
 	public UltrasonicSensorPWM(int port) {
 		inputPort = port;
@@ -16,22 +15,11 @@ public class UltrasonicSensorPWM {
 		pulseController = new DigitalOutput(outputPort);
 	}
 
-	public synchronized double getDistanceDouble() {
-		return distance;
-	}
-
-	private synchronized void setValue(double d) {
-		distance = d;
-	}
-
-	public synchronized UltrasonicValuePWM getDistance() {
-		UltrasonicValuePWM returnThis = new UltrasonicValuePWM(distance, isNew);
-		isNew = false;
-		return returnThis;
-	}
-
-	public void setSamplesToAverage(int numberSamples) {
-		counter.setSamplesToAverage(numberSamples);
+	public double getDistance() {
+		initializeSensor();
+		double pulseLength = counter.getPeriod()*1e6;
+		pr("Pulse Length: " + pulseLength);
+		return pulseLength;
 	}
 
 	public void initializeSensor() {
@@ -47,28 +35,13 @@ public class UltrasonicSensorPWM {
 			System.out.println("Ultrasonic Sensor: " + printData);
 	}
 
-	public void updateValue() {
-		initializeSensor();
-		double pulseLength = counter.getPeriod();
-		pr("Pulse Length: " + pulseLength);
-		setValue(pulseLength * 1e6);
-		isNew = true;
-	}
-
-	public class UltrasonicValuePWM {
-
-		public UltrasonicValuePWM(double d, boolean n) {
-			distance = d;
-			isNew = n;
-		}
-
-		public double distance;
-		public boolean isNew;
+	public void free() {
+		pulseController.free();
+		counter.free();
 	}
 
 	private int inputPort, outputPort;
 	private DigitalOutput pulseController;
 	private Counter counter;
 	private double distance = Double.NaN;
-	private boolean isNew = false;
 }

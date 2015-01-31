@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team766.robot;
 
+import org.usfirst.frc.team766.robot.commands.Calibrate2PWM;
 import org.usfirst.frc.team766.robot.commands.CalibrateUltrasonicSensor;
 import org.usfirst.frc.team766.robot.commands.TestPWMUltrasonic;
 import org.usfirst.frc.team766.robot.commands.TestTwoPWMs;
@@ -39,6 +40,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putData("Calibrate Ultrasonic", new CalibrateUltrasonicSensor());
         SmartDashboard.putData("TestPWM", new TestPWMUltrasonic());
         SmartDashboard.putData("Test 2 PWM", new TestTwoPWMs());
+        SmartDashboard.putData("Calibrate 2 PWM", new Calibrate2PWM());
     }
 	
 	public void disabledPeriodic() {

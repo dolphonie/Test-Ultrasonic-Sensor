@@ -1,8 +1,6 @@
 package org.usfirst.frc.team766.robot.commands;
 
-import org.usfirst.frc.team766.robot.UltrasonicSensor;
 import org.usfirst.frc.team766.robot.UltrasonicSensorPWM;
-import org.usfirst.frc.team766.robot.UltrasonicSensorPWM.UltrasonicValuePWM;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -15,23 +13,20 @@ public class TestPWMUltrasonic extends Command {
 	public TestPWMUltrasonic() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
-		//sensor = new UltrasonicSensorPWM(PORT);
+		
 	}
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
+		sensor = new UltrasonicSensorPWM(PORT);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		counter++;
 		if (counter >= 5) {
-			sensor.updateValue();
-			UltrasonicValuePWM distance = sensor.getDistance();
-			if (distance.isNew) {
 				System.out.println("Test Ultrasonic PWM: Distance to target: "
-						+ distance.distance);
-			}
+						+ sensor.getDistance());			
 			counter = 0;
 		}
 	}
@@ -43,11 +38,13 @@ public class TestPWMUltrasonic extends Command {
 
 	// Called once after isFinished returns true
 	protected void end() {
+		sensor.free();
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
+		end();
 	}
 
 	UltrasonicSensorPWM sensor;
