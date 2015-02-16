@@ -19,14 +19,14 @@ public class UltrasonicSensor implements Runnable {
 		serverThread.start();
 	}
 
-	public synchronized UltrasonicValue getDistance() {
+	public synchronized UltrasonicInfo getDistance() {
 		boolean isCurrentNew = isNewValue;
 		isNewValue = false;
-		return new UltrasonicValue(distance,isCurrentNew);
+		return new UltrasonicInfo(distance,isCurrentNew);
 	}
 	
 	public double getDistanceDouble() {
-		return getDistance().distance;
+		return getDistance().getDistance1();
 	}
 
 	private synchronized void setValue(double d) {
@@ -79,16 +79,6 @@ public class UltrasonicSensor implements Runnable {
 		}
 	}
 	
-	public class UltrasonicValue{
-		
-		public UltrasonicValue(double d, boolean n){
-			distance = d;
-			isNew = n;
-		}
-		
-		public double distance;
-		public boolean isNew;
-	}
 	
 	private boolean isNewValue = false;
 	private SerialPort port;

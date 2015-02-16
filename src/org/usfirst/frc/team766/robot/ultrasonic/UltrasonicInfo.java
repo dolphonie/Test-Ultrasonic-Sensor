@@ -8,6 +8,11 @@ public class UltrasonicInfo {
 		this.isNew = isNew;
 	}
 	
+	public UltrasonicInfo(double distance, boolean isNew){
+		distances[0] = distance;
+		this.isNew = isNew;
+	}
+	
 	public UltrasonicInfo(double[] distances, boolean isNew) {
 		this.distances = distances;
 		this.angle = Double.NaN;

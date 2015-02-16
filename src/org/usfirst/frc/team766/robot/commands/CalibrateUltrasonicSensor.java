@@ -2,8 +2,8 @@ package org.usfirst.frc.team766.robot.commands;
 
 import java.util.ArrayList;
 
+import org.usfirst.frc.team766.robot.ultrasonic.UltrasonicInfo;
 import org.usfirst.frc.team766.robot.ultrasonic.UltrasonicSensor;
-import org.usfirst.frc.team766.robot.ultrasonic.UltrasonicSensor.UltrasonicValue;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -26,18 +26,18 @@ public class CalibrateUltrasonicSensor extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		UltrasonicValue currentValue = UltrasonicSensor.getInstance()
+		UltrasonicInfo currentValue = UltrasonicSensor.getInstance()
 				.getDistance();
-		if (currentValue.isNew) {
+		if (currentValue.isNew()) {
 			pr("Distance to target: "
-					+ new String(new Double(currentValue.distance).toString()));
-			distances.add(currentValue.distance);
+					+ new String(new Double(currentValue.getDistance1()).toString()));
+			distances.add(currentValue.getDistance1());
 			pr("Array Size: " + distances.size());
-			if (currentValue.distance > max) {
-				max = currentValue.distance;
+			if (currentValue.getDistance1() > max) {
+				max = currentValue.getDistance1();
 			}
-			if (currentValue.distance < min) {
-				min = currentValue.distance;
+			if (currentValue.getDistance1() < min) {
+				min = currentValue.getDistance1();
 			}
 
 			if (distances.size() >= 100) {
